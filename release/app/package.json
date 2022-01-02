@@ -1,0 +1,18 @@
+{
+  "name": "electron-mirror",
+  "version": "0.1.0",
+  "description": "Electron application for Smart Mirror using React via the electron-react-boilerplate repository",
+  "main": "./dist/main/main.js",
+  "author": {
+    "name": "Sean Dougherty",
+    "email": "inbox@seandougherty.dev",
+    "url": "https://seandougherty.dev"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
+    "postinstall": "npm run electron-rebuild && npm run link-modules"
+  },
+  "dependencies": {},
+  "license": "MIT"
+}
