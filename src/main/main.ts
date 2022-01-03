@@ -74,8 +74,8 @@ const createWindow = async () => {
   if (isDevelopment) {
     mainWindow = new BrowserWindow({
       show: false,
-      width: 1024,
-      height: 728,
+      width: 768,
+      height: 512,
       frame: false,
       autoHideMenuBar: true,
       icon: getAssetPath('icon.png'),
@@ -91,6 +91,7 @@ const createWindow = async () => {
       autoHideMenuBar: true,
       icon: getAssetPath('icon.png'),
       webPreferences: {
+        devTools: false,
         preload: path.join(__dirname, 'preload.js'),
       },
     });
