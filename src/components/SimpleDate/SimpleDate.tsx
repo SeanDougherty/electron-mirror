@@ -1,5 +1,6 @@
 import { createUseStyles } from 'react-jss';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import FitText from '../util/FitText';
 
 interface GridVals {
   readonly rc: number;
@@ -39,12 +40,22 @@ const SimpleDate = (props: { gVals: GridVals }) => {
   const dateString = now.substring(now.indexOf(' '));
   return (
     <div className={classes.datebox}>
-      <span data-testid="day" className={classes.day}>
+      <FitText
+        data-testid="day"
+        className={classes.day}
+        width={containerVals.w}
+        height={containerVals.h * 0.6}
+      >
         {dayString}
-      </span>
-      <span data-testid="date" className={classes.date}>
+      </FitText>
+      <FitText
+        data-testid="date"
+        className={classes.date}
+        width={containerVals.w}
+        height={containerVals.h * 0.4}
+      >
         {dateString}
-      </span>
+      </FitText>
     </div>
   );
 };
@@ -65,13 +76,8 @@ const useStyles = createUseStyles(() => ({
   },
   day: {
     width: '100%',
-    fontSize: (v: CssVals) => `${v.c.h * 0.6}px`,
-    lineHeight: (v: CssVals) => `${v.c.h * 0.6}px`,
   },
-  date: {
-    fontSize: (v: CssVals) => `${v.c.h * 0.3}px`,
-    lineHeight: (v: CssVals) => `${v.c.h * 0.3}px`,
-  },
+  date: {},
 }));
 
 export default SimpleDate;

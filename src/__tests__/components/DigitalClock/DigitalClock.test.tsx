@@ -20,10 +20,7 @@ describe('DigitalClock', () => {
     const clock = render(<DigitalClock gVals={defaultGridVals} />);
     const now = new Date();
     // Adjustment for 12-hour clock
-    const hourString = (
-      ((now.getHours() - 1) % 12) +
-      Math.floor(now.getHours() / 12)
-    )
+    const hourString = (((now.getHours() - 1) % 12) + 1)
       .toString()
       .padStart(2, '0');
     const minuteString = now.getMinutes().toString().padStart(2, '0');

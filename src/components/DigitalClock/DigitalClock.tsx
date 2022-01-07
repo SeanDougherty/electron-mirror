@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import FitText from '../util/FitText';
 
 interface GridVals {
   readonly rc: number;
@@ -36,6 +37,8 @@ const DigitalClock = (props: { gVals: GridVals }) => {
   const period = timeString[1];
   const { gVals } = props;
   const { width, height } = useWindowDimensions();
+  const hourWidthRatio = 0.7;
+  const minuteHeightRatio = 0.75;
   // Calculates the size of the grid space reserved for this component
   const containerVals = {
     w:
@@ -45,20 +48,36 @@ const DigitalClock = (props: { gVals: GridVals }) => {
       (Math.abs(gVals.rs - gVals.re) / gVals.rc) * (height - 11 * gVals.gapPx) +
       gVals.gapPx * (Math.abs(gVals.rs - gVals.re) - 1),
   };
-
   const classes = useStyles({ g: gVals, c: containerVals });
   return (
     <div className={classes.clock}>
       <div className={classes.left}>
-        <span data-testid="hour" className={classes.hour}>
+        <FitText
+          data-testid="hour"
+          className={classes.hour}
+          width={containerVals.w * hourWidthRatio}
+          height={containerVals.h}
+        >
           {hourString}
-        </span>
+        </FitText>
       </div>
       <div className={classes.middle}>
-        <span data-testid="minute" className={classes.minute}>
+        <FitText
+          data-testid="minute"
+          className={classes.minute}
+          width={containerVals.w * (1 - hourWidthRatio)}
+          height={containerVals.h * minuteHeightRatio}
+        >
           {minString}
-        </span>
-        <span className={classes.period}>{period}</span>
+        </FitText>
+        <FitText
+          data-testid="period"
+          className={classes.period}
+          width={containerVals.w * (1 - hourWidthRatio)}
+          height={containerVals.h * (1 - minuteHeightRatio)}
+        >
+          {period}
+        </FitText>
       </div>
     </div>
   );
@@ -106,24 +125,14 @@ const useStyles = createUseStyles(() => ({
     justifyContent: 'space-between',
   },
   // Adjusts fontSize to fit clock to Grid Container
-  hour: {
-    fontSize: (v: CssVals) =>
-      `${v.c.h < v.c.w * 0.65 ? v.c.h * 1 : v.c.w * 0.6}px`,
-    lineHeight: (v: CssVals) =>
-      `${v.c.h < v.c.w * 0.65 ? v.c.h * 1 : v.c.w * 0.6}px`,
-  },
-  minute: {
-    fontSize: (v: CssVals) =>
-      `${v.c.h < v.c.w * 0.65 ? v.c.h * 0.3 : v.c.w * 0.2}px`,
-  },
+  hour: {},
+  minute: {},
   second: {
     textAlign: 'center',
     fontSize: 'min(16px,5vw)',
   },
   period: {
     alignSelf: 'end',
-    fontSize: (v: CssVals) =>
-      `${v.c.h < v.c.w * 0.65 ? v.c.h * 0.2 : v.c.w * 0.1}px`,
   },
 }));
 
