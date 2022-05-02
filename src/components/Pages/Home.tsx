@@ -1,6 +1,7 @@
 import { createUseStyles } from 'react-jss';
 import SimpleDate from '../SimpleDate/SimpleDate';
 import DigitalClock from '../DigitalClock/DigitalClock';
+import Vocality from './Vocality';
 
 interface GridSettings {
   rc: number;
@@ -35,6 +36,7 @@ const Home = () => {
           gapPx: g.gapPx,
         }}
       />
+      <Vocality />
     </div>
   );
 };

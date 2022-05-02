@@ -1,5 +1,42 @@
+import { useEffect, useState } from 'react';
+import { createUseStyles } from 'react-jss';
+
+interface TextColor {
+  color: string;
+}
+
 const Vocality = () => {
-  return <div>test</div>;
+  const [c, setC] = useState({ color: '#070' });
+  const classes = useStyles(c);
+
+  const launchVocalityHandler = () => {
+    setC({ color: '#f00' });
+    // calling IPC exposed from preload script
+    window.electron.ipcRenderer.once('ipc-example', (arg) => {
+      // eslint-disable-next-line no-console
+      console.log(arg);
+    });
+    window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
+  };
+
+  return (
+    <div>
+      <button
+        className={classes.text}
+        onClick={launchVocalityHandler}
+        type="button"
+      >
+        test
+      </button>
+    </div>
+  );
 };
+
+const useStyles = createUseStyles(() => ({
+  text: {
+    '-webkit-app-region': 'none',
+    color: (c: TextColor) => `${c.color}`,
+  },
+}));
 
 export default Vocality;
