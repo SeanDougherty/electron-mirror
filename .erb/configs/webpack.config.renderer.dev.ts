@@ -1,3 +1,4 @@
+import 'webpack-dev-server';
 import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
@@ -5,10 +6,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -151,7 +152,6 @@ const configuration: webpack.Configuration = {
     __filename: false,
   },
 
-  // @ts-ignore
   devServer: {
     port,
     compress: true,
@@ -163,15 +163,26 @@ const configuration: webpack.Configuration = {
     historyApiFallback: {
       verbose: true,
     },
-    onBeforeSetupMiddleware() {
-      console.log('Starting Main Process...');
-      spawn('npm', ['run', 'start:main'], {
+    setupMiddlewares(middlewares) {
+      console.log('Starting preload.js builder...');
+      const preloadProcess = spawn('npm', ['run', 'start:preload'], {
         shell: true,
-        env: process.env,
         stdio: 'inherit',
       })
         .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
+
+      console.log('Starting Main Process...');
+      spawn('npm', ['run', 'start:main'], {
+        shell: true,
+        stdio: 'inherit',
+      })
+        .on('close', (code: number) => {
+          preloadProcess.kill();
+          process.exit(code!);
+        })
+        .on('error', (spawnError) => console.error(spawnError));
+      return middlewares;
     },
   },
 };

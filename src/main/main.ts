@@ -33,6 +33,10 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+ipcMain.on('vocality', async (event, args) => {
+  console.log(args);
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -80,7 +84,9 @@ const createWindow = async () => {
       autoHideMenuBar: true,
       icon: getAssetPath('icon.png'),
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
+        preload: app.isPackaged
+          ? path.join(__dirname, 'preload.js')
+          : path.join(__dirname, '../../.erb/dll/preload.js'),
       },
     });
   } else {
