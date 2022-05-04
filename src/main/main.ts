@@ -8,6 +8,7 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import { exec } from 'child_process';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
@@ -34,6 +35,20 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.on('vocality', async (event, args) => {
+  console.log('calling go...');
+  // const childProcess = exec('go');
+  const childProcess = exec('pwd', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+  setTimeout(() => {
+    console.log(`waiting...`);
+    childProcess.kill();
+  }, 10000);
   console.log(args);
 });
 

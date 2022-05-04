@@ -16,7 +16,12 @@ const Vocality = () => {
       // eslint-disable-next-line no-console
       console.log(arg);
     });
-    window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
+    window.electron.ipcRenderer.once('vocality', (arg) => {
+      // eslint-disable-next-line no-console
+      console.log(arg);
+    });
+    window.electron.ipcRenderer.sendMessage('vocality', ['this is a test!']);
+    window.electron.ipcRenderer.sendMessage('ipc-example', ['ping!']);
   };
 
   return (

@@ -1,0 +1,3 @@
+[submodule "src/vocal-ity"]
+	path = src/vocal-ity
+	url = https://github.com/seandough3rty/vocal-ity.git
